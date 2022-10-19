@@ -711,7 +711,6 @@ def validate_distribution(
     framework_version,
     py_version,
     image_uri,
-    entry_point,
     kwargs,
 ):
     """Check if distribution strategy is correctly invoked by the user.
@@ -737,8 +736,6 @@ def validate_distribution(
         framework_version (str): A string representing the framework version selected.
         py_version (str): A string representing the python version selected.
         image_uri (str): A string representing a Docker image URI.
-        entry_point (str or PipelineVariable): Path (absolute or relative) to the
-            Python source file which should be executed as the entry point to training.
         kwargs(dict): Additional kwargs passed to this function
 
     Returns:
@@ -806,7 +803,7 @@ def validate_distribution(
                 framework_version=framework_version,
                 py_version=py_version,
                 image_uri=image_uri,
-                entry_point=entry_point,
+                entry_point=kwargs["entry_point"],
             )
             warn_if_parameter_server_with_multi_gpu(
                 training_instance_type=instance_type, distribution=distribution
@@ -845,7 +842,7 @@ def validate_distribution(
             framework_version=framework_version,
             py_version=py_version,
             image_uri=image_uri,
-            entry_point=entry_point,
+            entry_point=kwargs["entry_point"],
         )
         warn_if_parameter_server_with_multi_gpu(
             training_instance_type=instance_type, distribution=distribution
@@ -866,7 +863,7 @@ def validate_distribution_for_instance_type(instance_type, distribution):
         keys = distribution.keys()
         if len(keys) == 0:
             return
-        elif len(keys) == 1:
+        if len(keys) == 1:
             distribution_strategy = keys[0]
             if distribution_strategy != "torch_distributed":
                 err_msg += (
@@ -877,7 +874,7 @@ def validate_distribution_for_instance_type(instance_type, distribution):
                 )
         elif len(keys) > 1:
             err_msg += (
-                f"Multiple distribution strategies are not supported for Trainium instances.\n"
+                "Multiple distribution strategies are not supported for Trainium instances.\n"
                 "Please specify one of the following supported distribution strategies:"
                 f" {TRAINIUM_SUPPORTED_DISTRIBUTION_STRATEGIES} "
             )
@@ -1008,15 +1005,14 @@ def validate_torch_distributed_distribution(
 
     # Check instance compatibility
     match = re.match(r"^ml[\._]([a-z\d]+)\.?\w*$", instance_type)
-    if match and match[1].startswith("trn"):
-        return
-    else:
-        err_msg += (
-            "torch_distributed is currently supported only for trainium instances.\n"
-            " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html\
-                #distributed-pytorch-training \
-                for information regarding distributed training on non-trainium instances"
-        )
+    if match:
+        if not match[1].startswith("trn"):
+            err_msg += (
+                "torch_distributed is currently supported only for trainium instances.\n"
+                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html\
+                    #distributed-pytorch-training \
+                    for information regarding distributed training on non-trainium instances"
+            )
 
     # Check entry point type
     if not entry_point.endswith(".py"):

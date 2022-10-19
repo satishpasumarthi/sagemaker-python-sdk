@@ -232,6 +232,9 @@ class PyTorch(Framework):
             entry_point, source_dir, hyperparameters, image_uri=image_uri, **kwargs
         )
         if distribution is not None:
+            if "entry_point" not in kwargs:
+                # needed for torch_distributed checks
+                kwargs["entry_point"] = entry_point
             distribution = validate_distribution(
                 distribution,
                 self.instance_groups,
@@ -239,7 +242,6 @@ class PyTorch(Framework):
                 framework_version,
                 py_version,
                 image_uri,
-                entry_point,
                 kwargs,
             )
 
