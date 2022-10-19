@@ -1012,8 +1012,9 @@ def validate_torch_distributed_distribution(
         return
     else:
         err_msg += (
-            f"torch_distributed is currently supported only for trainium instances."
-            " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \
+            "torch_distributed is currently supported only for trainium instances.\n"
+            " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html\
+                #distributed-pytorch-training \
                 for information regarding distributed training on non-trainium instances"
         )
 

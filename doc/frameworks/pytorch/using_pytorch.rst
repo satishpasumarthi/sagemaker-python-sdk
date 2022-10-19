@@ -292,8 +292,8 @@ using two ``ml.p4d.24xlarge`` instances:
 
     pt_estimator.fit("s3://bucket/path/to/training/data")
 
-.. _distributed-pytorch-training-on-trainium:
-=============================================
+Distributed PyTorch Training on Trainium
+========================================
 
 SageMaker Training on Trainium instances now supports the `xla`
 package through `torchrun`. With this, you do not need to manually pass RANK, 
