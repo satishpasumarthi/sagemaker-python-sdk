@@ -1003,6 +1003,17 @@ def test_validate_torch_distributed_raises():
             image_uri=None,
         )
 
+    # Case 3: Unsupported Entry point type
+    with pytest.raises(ValueError):
+        fw_utils.validate_torch_distributed_distribution(
+            distribution=torch_distributed_enabled,
+            framework_name="pytorch",
+            framework_version="1.11.0",
+            py_version="py2",
+            image_uri=None,
+            entry_point="test.sh",
+        )
+
 
 def test_validate_unsupported_distributions_trainium_raises():
     with pytest.raises(ValueError):

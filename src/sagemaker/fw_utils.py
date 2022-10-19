@@ -860,7 +860,7 @@ def validate_distribution_for_instance_type(instance_type, distribution):
     match = re.match(r"^ml[\._]([a-z\d]+)\.?\w*$", instance_type)
     err_msg = ""
     if match and match[1].startswith("trn"):
-        keys = distribution.keys()
+        keys = list(distribution.keys())
         if len(keys) == 0:
             return
         if len(keys) == 1:
@@ -1009,15 +1009,14 @@ def validate_torch_distributed_distribution(
         if not match[1].startswith("trn"):
             err_msg += (
                 "torch_distributed is currently supported only for trainium instances.\n"
-                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html\
-                    #distributed-pytorch-training \
-                    for information regarding distributed training on non-trainium instances"
+                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \n"  # noqa E501  # pylint: disable=c0301
+                "for information regarding distributed training on non-trainium instances"
             )
 
     # Check entry point type
     if not entry_point.endswith(".py"):
         err_msg += (
-            "Unsupported entry point type for torch_distributed.\n"
+            "Unsupported entry point type for the distribution torch_distributed.\n"
             "Only python programs (*.py) are supported."
         )
 
