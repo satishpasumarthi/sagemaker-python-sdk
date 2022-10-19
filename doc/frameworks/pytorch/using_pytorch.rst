@@ -296,7 +296,7 @@ Distributed PyTorch Training on Trainium
 ========================================
 
 SageMaker Training on Trainium instances now supports the `xla`
-package through `torchrun`. With this, you do not need to manually pass RANK, 
+package through `torchrun`. With this, you do not need to manually pass RANK,
 WORLD_SIZE, MASTER_ADDR, and MASTER_PORT. You can launch the training job using the
 :class:`sagemaker.pytorch.estimator.PyTorch` estimator class
 with the ``torch_distributed`` option as the distribution strategy.
@@ -345,8 +345,6 @@ than one, a multi-node training job is launched.
 With the ``torch_distributed`` option, the SageMaker PyTorch estimator runs a SageMaker
 training container for PyTorch Neuron, sets up the environment, and launches
 the training job using the ``torchrun`` command on each worker with the given information.
-
-.. note::
 
 The following example shows how to run a PyTorch training using ``torch_distributed`` in SageMaker
 using one ``ml.trn1.2xlarge`` and two ``ml.trn1.32xlarge`` instances:

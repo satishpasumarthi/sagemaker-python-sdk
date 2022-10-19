@@ -177,6 +177,7 @@ class PyTorch(Framework):
                             "enabled": True
                         }
                     }
+
                     To learn more, see `Distributed PyTorch Training on Trainium
                     <https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training-on-trainium>`_.
 

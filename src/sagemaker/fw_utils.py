@@ -1009,8 +1009,8 @@ def validate_torch_distributed_distribution(
         if not match[1].startswith("trn"):
             err_msg += (
                 "torch_distributed is currently supported only for trainium instances.\n"
-                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \
-                for information regarding distributed training on non-trainium instances" # noqa
+                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \n"  # noqa E501  # pylint: disable=c0301
+                "for information regarding distributed training on non-trainium instances"
             )
 
     # Check entry point type
