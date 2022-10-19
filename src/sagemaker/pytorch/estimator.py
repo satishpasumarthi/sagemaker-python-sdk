@@ -169,14 +169,16 @@ class PyTorch(Framework):
                     To learn more, see `Distributed PyTorch Training
                     <https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training>`_.
 
-                **To enable Torch Distributed (Trainium Instances):**
+                **To enable Torch Distributed (for Trainium instances only):**
 
                     .. code:: python
-                    {
-                        "torch_distributed": {
-                            "enabled": True
+
+                        {
+                            "torch_distributed": {
+                                "enabled": True
+                            }
                         }
-                    }
+
                     To learn more, see `Distributed PyTorch Training on Trainium
                     <https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training-on-trainium>`_.
 

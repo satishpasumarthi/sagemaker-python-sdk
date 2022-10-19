@@ -262,7 +262,8 @@ during the PyTorch DDP initialization.
 
 .. note::
 
-  The SageMaker PyTorch estimator doesn’t use ``torchrun`` for distributed training.
+  The SageMaker PyTorch estimator operates ``mpirun`` in the backend.
+  It doesn’t use ``torchrun`` for distributed training.
 
 For more information about setting up PyTorch DDP in your training script,
 see `Getting Started with Distributed Data Parallel
@@ -292,11 +293,13 @@ using two ``ml.p4d.24xlarge`` instances:
 
     pt_estimator.fit("s3://bucket/path/to/training/data")
 
+.. _distributed-pytorch-training-on-trainium:
+
 Distributed PyTorch Training on Trainium
 ========================================
 
-SageMaker Training on Trainium instances now supports the `xla`
-package through `torchrun`. With this, you do not need to manually pass RANK, 
+SageMaker Training on Trainium instances now supports the ``xla``
+package through ``torchrun``. With this, you do not need to manually pass RANK,
 WORLD_SIZE, MASTER_ADDR, and MASTER_PORT. You can launch the training job using the
 :class:`sagemaker.pytorch.estimator.PyTorch` estimator class
 with the ``torch_distributed`` option as the distribution strategy.
@@ -309,8 +312,8 @@ with the ``torch_distributed`` option as the distribution strategy.
 
   SageMaker Debugger and Profiler are currently not supported with Trainium instances.
 
-Adapt Your Training Script
---------------------------
+Adapt Your Training Script to Initialize with the XLA backend
+-------------------------------------------------------------
 
 To initialize distributed training in your script, call
 `torch.distributed.init_process_group
@@ -333,8 +336,8 @@ For detailed documentation about modifying your training script for Trainium, se
 
 For up-to-date information on supported backends for Trainium instances, see `AWS Neuron Documentation <https://awsdocs-neuron.readthedocs-hosted.com/en/latest/index.html>`_.
 
-Launching a Distributed Training Job
-------------------------------------
+Launching a Distributed Training Job on Trainium
+------------------------------------------------
 
 You can run multi-node distributed PyTorch training jobs on Trainium instances using the
 :class:`sagemaker.pytorch.estimator.PyTorch` estimator class.
@@ -346,10 +349,10 @@ With the ``torch_distributed`` option, the SageMaker PyTorch estimator runs a Sa
 training container for PyTorch Neuron, sets up the environment, and launches
 the training job using the ``torchrun`` command on each worker with the given information.
 
-.. note::
+**Examples**
 
-The following example shows how to run a PyTorch training using ``torch_distributed`` in SageMaker
-using one ``ml.trn1.2xlarge`` and two ``ml.trn1.32xlarge`` instances:
+The following examples show how to run a PyTorch training using ``torch_distributed`` in SageMaker
+on one ``ml.trn1.2xlarge`` instance and two ``ml.trn1.32xlarge`` instances:
 
 .. code:: python
 
