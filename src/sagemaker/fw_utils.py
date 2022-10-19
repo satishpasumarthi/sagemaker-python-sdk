@@ -134,14 +134,9 @@ PYTORCHDDP_SUPPORTED_FRAMEWORK_VERSIONS = [
     "1.12.0",
 ]
 
-TORCH_DISTRIBUTED_SUPPORTED_FRAMEWORK_VERSIONS = [
-    "1.11",
-    "1.11.0"
-]
+TORCH_DISTRIBUTED_SUPPORTED_FRAMEWORK_VERSIONS = ["1.11", "1.11.0"]
 
-TRAINIUM_SUPPORTED_DISTRIBUTION_STRATEGIES = [
-    "torch_distributed"
-]
+TRAINIUM_SUPPORTED_DISTRIBUTION_STRATEGIES = ["torch_distributed"]
 
 SMDISTRIBUTED_SUPPORTED_STRATEGIES = ["dataparallel", "modelparallel"]
 
@@ -710,7 +705,14 @@ def _validate_smdataparallel_args(
 
 
 def validate_distribution(
-    distribution, instance_groups, framework_name, framework_version, py_version, image_uri, entry_point, kwargs
+    distribution,
+    instance_groups,
+    framework_name,
+    framework_version,
+    py_version,
+    image_uri,
+    entry_point,
+    kwargs,
 ):
     """Check if distribution strategy is correctly invoked by the user.
 
@@ -850,9 +852,8 @@ def validate_distribution(
         )
     return distribution
 
-def validate_distribution_for_instance_type(
-    instance_type, distribution
-):
+
+def validate_distribution_for_instance_type(instance_type, distribution):
     """Check if the provided distribution strategy is supported for the instance_type
 
     Args:
@@ -869,11 +870,11 @@ def validate_distribution_for_instance_type(
             distribution_strategy = keys[0]
             if distribution_strategy != "torch_distributed":
                 err_msg += (
-                f"Provided distribution strategy {distribution_strategy} is not supported for"
-                " Trainium instances.\n"
-                "Please specify one of the following supported distribution strategies:"
-                f" {TRAINIUM_SUPPORTED_DISTRIBUTION_STRATEGIES} \n"
-            )
+                    f"Provided distribution strategy {distribution_strategy} is not supported for"
+                    " Trainium instances.\n"
+                    "Please specify one of the following supported distribution strategies:"
+                    f" {TRAINIUM_SUPPORTED_DISTRIBUTION_STRATEGIES} \n"
+                )
         elif len(keys) > 1:
             err_msg += (
                 f"Multiple distribution strategies are not supported for Trainium instances.\n"
@@ -883,6 +884,7 @@ def validate_distribution_for_instance_type(
 
     if err_msg:
         raise ValueError(err_msg)
+
 
 def validate_pytorch_distribution(
     distribution, framework_name, framework_version, py_version, image_uri
@@ -940,8 +942,15 @@ def validate_pytorch_distribution(
     if err_msg:
         raise ValueError(err_msg)
 
+
 def validate_torch_distributed_distribution(
-    instance_type, distribution, framework_name, framework_version, py_version, image_uri, entry_point,
+    instance_type,
+    distribution,
+    framework_name,
+    framework_version,
+    py_version,
+    image_uri,
+    entry_point,
 ):
     """Check if torch_distributed distribution strategy is correctly invoked by the user.
 
@@ -1003,19 +1012,21 @@ def validate_torch_distributed_distribution(
         return
     else:
         err_msg += (
-                f"torch_distributed is currently supported only for trainium instances."
-                " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \
+            f"torch_distributed is currently supported only for trainium instances."
+            " Please refer https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training \
                 for information regarding distributed training on non-trainium instances"
         )
 
     # Check entry point type
     if not entry_point.endswith(".py"):
-        err_msg += ("Unsupported entry point type for torch_distributed.\n"
-                    "Only python programs (*.py) are supported."
+        err_msg += (
+            "Unsupported entry point type for torch_distributed.\n"
+            "Only python programs (*.py) are supported."
         )
-    
+
     if err_msg:
         raise ValueError(err_msg)
+
 
 def python_deprecation_warning(framework, latest_supported_version):
     """Placeholder docstring"""

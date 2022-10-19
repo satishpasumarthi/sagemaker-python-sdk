@@ -168,7 +168,7 @@ class PyTorch(Framework):
 
                     To learn more, see `Distributed PyTorch Training
                     <https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training>`_.
-                
+
                 **To enable Torch Distributed (Trainium Instances):**
 
                     .. code:: python
@@ -177,7 +177,7 @@ class PyTorch(Framework):
                             "enabled": True
                         }
                     }
-                    To learn more, see `Distributed PyTorch Training on Trainium 
+                    To learn more, see `Distributed PyTorch Training on Trainium
                     <https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#distributed-pytorch-training-on-trainium>`_.
 
                 **To enable MPI:**

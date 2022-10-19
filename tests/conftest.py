@@ -452,11 +452,10 @@ def torch_distributed_py_version():
     return "py3"
 
 
-@pytest.fixture(
-    scope="module", params=["1.11.0"]
-)
+@pytest.fixture(scope="module", params=["1.11.0"])
 def torch_distributed_framework_version(request):
     return request.param
+
 
 @pytest.fixture(scope="session")
 def cpu_instance_type(sagemaker_session, request):
