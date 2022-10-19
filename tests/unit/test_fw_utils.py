@@ -946,3 +946,86 @@ def test_validate_pytorchddp_raises():
             py_version="py2",
             image_uri=None,
         )
+
+def test_validate_torch_distributed_not_raises():
+    # Case 1: Framework is not PyTorch
+    fw_utils.validate_torch_distributed_distribution(
+        distribution=None,
+        framework_name="tensorflow",
+        framework_version="2.9.1",
+        py_version="py3",
+        image_uri="custom-container",
+    )
+    # Case 2: Framework is PyTorch, but distribution is not torch_distributed
+    torch_distributed_disabled = {"torch_distributed": {"enabled": False}}
+    fw_utils.validate_pytorch_distribution(
+        distribution=torch_distributed_disabled,
+        framework_name="pytorch",
+        framework_version="1.11.0",
+        py_version="py3",
+        image_uri="custom-container",
+    )
+    # Case 3: Framework is PyTorch, Distribution is torch_distributed enabled, supported framework and py versions
+    torch_distributed_enabled = {"pytorchddp": {"enabled": True}}
+    torch_distributed_supported_fw_versions = [
+        "1.11.0",
+    ]
+    for framework_version in torch_distributed_supported_fw_versions:
+        fw_utils.validate_torch_distributed_distribution(
+            distribution=torch_distributed_enabled,
+            framework_name="pytorch",
+            framework_version=framework_version,
+            py_version="py3",
+            image_uri="custom-container",
+        )
+
+def test_validate_torch_distributed_raises():
+    torch_distributed_enabled = {"torch_distributed": {"enabled": True}}
+    # Case 1: Unsupported framework version
+    with pytest.raises(ValueError):
+        fw_utils.validate_torch_distributed_distribution(
+            distribution=torch_distributed_enabled,
+            framework_name="pytorch",
+            framework_version="1.10.0",
+            py_version="py3",
+            image_uri=None,
+        )
+
+    # Case 2: Unsupported Py version
+    with pytest.raises(ValueError):
+        fw_utils.validate_torch_distributed_distribution(
+            distribution=torch_distributed_enabled,
+            framework_name="pytorch",
+            framework_version="1.11.0",
+            py_version="py2",
+            image_uri=None,
+        )
+
+def test_validate_unsupported_distributions_trainium_raises():
+    with pytest.raises(ValueError):
+        mpi_enabled = {"mpi": {"enabled": True}}
+        fw_utils.validate_distribution_for_instance_type(
+            distribution=mpi_enabled,
+            instance_type="ml.trn1.2xlarge",
+        )
+
+    with pytest.raises(ValueError):
+        mpi_enabled = {"mpi": {"enabled": True}}
+        fw_utils.validate_distribution_for_instance_type(
+            distribution=mpi_enabled,
+            instance_type="ml.trn1.32xlarge",
+        )
+    
+    with pytest.raises(ValueError):
+        pytorch_ddp_enabled = {"pytorch_ddp": {"enabled": True}}
+        fw_utils.validate_distribution_for_instance_type(
+            distribution=pytorch_ddp_enabled,
+            instance_type="ml.trn1.32xlarge",
+        )
+    
+    with pytest.raises(ValueError):
+        smdataparallel_enabled = {"smdataparallel": {"enabled": True}}
+        fw_utils.validate_distribution_for_instance_type(
+            distribution=smdataparallel_enabled,
+            instance_type="ml.trn1.32xlarge",
+        )
